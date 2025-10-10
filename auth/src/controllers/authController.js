@@ -40,11 +40,20 @@ class AuthController {
     }
 
     async getProfile(req, res) {
-        const userId = req.user.id;
+            const userId = req.user.id;
 
+            try {
+                const user = await this.authService.getUserById(userId);
+                res.json(user);
+            } catch (err) {
+                res.status(400).json({ message: err.message });
+            }
+        }
+        //thêm hàm deleteTestUsers để xóa user test
+    async deleteTestUsers(req, res) {
         try {
-            const user = await this.authService.getUserById(userId);
-            res.json(user);
+            await this.authService.deleteTestUsers();
+            res.json({ message: "Test users deleted" });
         } catch (err) {
             res.status(400).json({ message: err.message });
         }

@@ -13,10 +13,14 @@ class AuthService {
     }
 
     async findUserByUsername(username) {
-        const user = await User.findOne({ username });
+            const user = await User.findOne({ username });
+            return user;
+        }
+        //thêm hàm getUserById để lấy thông tin user từ id
+    async getUserById(id) {
+        const user = await User.findById(id);
         return user;
     }
-
     async login(username, password) {
         const user = await this.userRepository.getUserByUsername(username);
 
@@ -36,12 +40,12 @@ class AuthService {
     }
 
     async register(user) {
-        const salt = await bcrypt.genSalt(10);
-        user.password = await bcrypt.hash(user.password, salt);
+            const salt = await bcrypt.genSalt(10);
+            user.password = await bcrypt.hash(user.password, salt);
 
-        return await this.userRepository.createUser(user);
-    }
-
+            return await this.userRepository.createUser(user);
+        }
+        //thêm hàm deleteTestUsers để xóa user test
     async deleteTestUsers() {
         // Delete all users with a username that starts with "test"
         await User.deleteMany({ username: /^test/ });
